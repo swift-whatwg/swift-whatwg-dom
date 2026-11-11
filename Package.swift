@@ -18,6 +18,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-whatwg/swift-whatwg.git", branch: "main"),
         .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-binary.git", branch: "main"),
     ],
     targets: [
         .target(
@@ -25,6 +26,7 @@ let package = Package(
             dependencies: [
                 .product(name: "WHATWG", package: "swift-whatwg"),
                 .product(name: "Byte", package: "swift-byte"),
+                .product(name: "Binary", package: "swift-binary"),
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Extern")
@@ -33,7 +35,8 @@ let package = Package(
         .target(
             name: "WHATWG DOM Test Support",
             dependencies: [
-                .target(name: "WHATWG DOM")
+                .target(name: "WHATWG DOM"),
+                .product(name: "Binary", package: "swift-binary"),
             ],
             path: "Tests/Support"
         ),

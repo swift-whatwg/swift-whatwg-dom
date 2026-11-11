@@ -68,16 +68,16 @@ struct `WHATWG.DOM.Batch Tests` {
         var batch = WHATWG.DOM.Batch()
         let root = batch.select("#app")
         let button = batch.element("button")
-        batch.listen("click", 7, on: button)
+        batch.listen(.click, 7, on: button)
         batch.insert(button, into: root, before: nil)
         memory.apply(batch.drain())
         var received: [Int32] = []
         unsafe WHATWG.DOM.Loop.dispatch = { received.append($0) }
-        memory.fire("click", on: memory.first("button"))
+        memory.fire(.click, on: memory.first("button"))
         #expect(received == [7])
-        batch.ignore("click", 7, on: button)
+        batch.ignore(.click, 7, on: button)
         memory.apply(batch.drain())
-        memory.fire("click", on: memory.first("button"))
+        memory.fire(.click, on: memory.first("button"))
         #expect(received == [7])
     }
 

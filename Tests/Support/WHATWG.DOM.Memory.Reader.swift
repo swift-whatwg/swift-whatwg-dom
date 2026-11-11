@@ -1,4 +1,5 @@
 public import WHATWG_DOM
+import Binary
 
 extension WHATWG.DOM.Memory {
 
@@ -28,11 +29,8 @@ extension WHATWG.DOM.Memory.Reader {
     }
 
     public mutating func int() -> Int32 {
-        var bits: UInt32 = 0
-        for shift in [0, 8, 16, 24] {
-            bits |= UInt32(UInt8(bitPattern: byte())) << UInt32(shift)
-        }
-        return Int32(bitPattern: bits)
+        defer { at += 4 }
+        return Int32(bytes: bytes[at..<(at + 4)], endianness: .little) ?? 0
     }
 
     public mutating func string() -> String {

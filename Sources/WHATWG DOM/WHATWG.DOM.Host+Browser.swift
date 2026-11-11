@@ -4,15 +4,15 @@
         public static var browser: Self {
             Self(
                 flush: { bytes in
-                    unsafe bytes.withUnsafeBytes { buffer in
+                    bytes.withUnsafeBytes { buffer in
                         unsafe _flush(buffer.baseAddress, Int32(buffer.count))
                     }
                 },
                 schedule: { _schedule() },
                 target: {
-                    let count = unsafe _value(nil, 0)
+                    let count = _value(nil, 0)
                     var units = [UInt8](repeating: 0, count: Int(count))
-                    unsafe units.withUnsafeMutableBytes { buffer in
+                    units.withUnsafeMutableBytes { buffer in
                         _ = unsafe _value(buffer.baseAddress, count)
                     }
                     return WHATWG.DOM.Target(

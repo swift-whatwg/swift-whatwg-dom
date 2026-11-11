@@ -1,3 +1,5 @@
+internal import Binary
+
 extension WHATWG.DOM {
 
     public struct Batch: Sendable {
@@ -36,11 +38,7 @@ extension WHATWG.DOM.Batch {
     }
 
     private mutating func write(_ value: Int32) {
-        let bits = UInt32(bitPattern: value)
-        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits)))
-        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 8)))
-        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 16)))
-        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 24)))
+        value.bytes(into: &bytes, endianness: .little)
     }
 
     private mutating func write(_ node: WHATWG.DOM.Node) {
@@ -131,17 +129,17 @@ extension WHATWG.DOM.Batch {
         write(data)
     }
 
-    public mutating func listen(_ event: String, _ listener: Int32, on node: WHATWG.DOM.Node) {
+    public mutating func listen(_ event: WHATWG.DOM.Event, _ listener: Int32, on node: WHATWG.DOM.Node) {
         write(.listen)
         write(node)
-        write(event)
+        write(event.type)
         write(listener)
     }
 
-    public mutating func ignore(_ event: String, _ listener: Int32, on node: WHATWG.DOM.Node) {
+    public mutating func ignore(_ event: WHATWG.DOM.Event, _ listener: Int32, on node: WHATWG.DOM.Node) {
         write(.ignore)
         write(node)
-        write(event)
+        write(event.type)
         write(listener)
     }
 

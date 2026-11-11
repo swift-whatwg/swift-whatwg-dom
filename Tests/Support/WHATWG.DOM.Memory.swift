@@ -45,12 +45,12 @@ extension WHATWG.DOM.Memory {
     }
 
     public func fire(
-        _ event: String,
+        _ event: WHATWG.DOM.Event,
         on element: WHATWG.DOM.Memory.Element,
         target: WHATWG.DOM.Target = WHATWG.DOM.Target()
     ) {
         self.target = target
-        for listener in element.listeners where listener.event == event {
+        for listener in element.listeners where listener.event == event.type {
             unsafe WHATWG.DOM.Loop.dispatch(listener.listener)
         }
     }
