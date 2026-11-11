@@ -16,13 +16,15 @@ let package = Package(
         .library(name: "WHATWG DOM Test Support", targets: ["WHATWG DOM Test Support"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-whatwg/swift-whatwg.git", branch: "main")
+        .package(url: "https://github.com/swift-whatwg/swift-whatwg.git", branch: "main"),
+        .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
     ],
     targets: [
         .target(
             name: "WHATWG DOM",
             dependencies: [
-                .product(name: "WHATWG", package: "swift-whatwg")
+                .product(name: "WHATWG", package: "swift-whatwg"),
+                .product(name: "Byte", package: "swift-byte"),
             ],
             swiftSettings: [
                 .enableExperimentalFeature("Extern")
@@ -47,17 +49,15 @@ let package = Package(
 )
 
 for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
-    let ecosystem: [SwiftSetting] = [
-        .strictMemorySafety(),
-        .enableUpcomingFeature("ExistentialAny"),
-        .enableUpcomingFeature("InternalImportsByDefault"),
-        .enableUpcomingFeature("MemberImportVisibility"),
-        .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
-        .enableExperimentalFeature("Lifetimes"),
-        .enableUpcomingFeature("InferIsolatedConformances"),
-    ]
-
-    let package: [SwiftSetting] = []
-
-    target.swiftSettings = (target.swiftSettings ?? []) + ecosystem + package
+    target.swiftSettings =
+        (target.swiftSettings ?? []) + [
+            .strictMemorySafety(),
+            .enableUpcomingFeature("ExistentialAny"),
+            .enableUpcomingFeature("InternalImportsByDefault"),
+            .enableUpcomingFeature("MemberImportVisibility"),
+            .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+            .enableUpcomingFeature("InferIsolatedConformances"),
+            .enableExperimentalFeature("Lifetimes"),
+            .treatAllWarnings(as: .error),
+        ]
 }

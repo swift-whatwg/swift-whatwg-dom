@@ -52,7 +52,7 @@ struct `WHATWG.DOM.Batch Tests` {
         batch.attribute("type", "checkbox", on: input)
         batch.attribute("title", "x", on: input)
         batch.attribute("title", nil, on: input)
-        batch.checked(true, on: input)
+        batch.checked(.checked, on: input)
         batch.value("é", on: input)
         let text = batch.text("old")
         batch.data("new", on: text)
@@ -72,19 +72,19 @@ struct `WHATWG.DOM.Batch Tests` {
         batch.insert(button, into: root, before: nil)
         memory.apply(batch.drain())
         var received: [Int32] = []
-        WHATWG.DOM.Loop.dispatch = { received.append($0) }
-        memory.fire("click", on: memory.first("button")!)
+        unsafe WHATWG.DOM.Loop.dispatch = { received.append($0) }
+        memory.fire("click", on: memory.first("button"))
         #expect(received == [7])
         batch.ignore("click", 7, on: button)
         memory.apply(batch.drain())
-        memory.fire("click", on: memory.first("button")!)
+        memory.fire("click", on: memory.first("button"))
         #expect(received == [7])
     }
 
     @Test
     func `the script handles every operation`() {
         for operation in WHATWG.DOM.Operation.allCases {
-            #expect(WHATWG.DOM.Script.source.contains("case \(operation.rawValue):"))
+            #expect(WHATWG.DOM.Script.source.contains("case \(UInt8(bitPattern: Byte(operation))):"))
         }
     }
 }

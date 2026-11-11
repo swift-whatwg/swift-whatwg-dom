@@ -1,8 +1,11 @@
 extension WHATWG.DOM {
 
-    public enum Script {
+    public enum Script {}
+}
 
-        public static let source: String = #"""
+extension WHATWG.DOM.Script {
+
+    public static let source: String = #"""
             const decoder = new TextDecoder();
             const encoder = new TextEncoder();
 
@@ -110,5 +113,4 @@ extension WHATWG.DOM {
               return exports;
             }
             """#
-    }
 }

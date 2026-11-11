@@ -2,7 +2,7 @@ extension WHATWG.DOM {
 
     public struct Batch: Sendable {
 
-        public private(set) var bytes: [UInt8]
+        public private(set) var bytes: [Byte]
 
         private var next: Int32
 
@@ -20,7 +20,7 @@ extension WHATWG.DOM.Batch {
 
     public var isEmpty: Bool { bytes.isEmpty }
 
-    public mutating func drain() -> [UInt8] {
+    public mutating func drain() -> [Byte] {
         defer { bytes.removeAll(keepingCapacity: true) }
         return bytes
     }
@@ -32,15 +32,15 @@ extension WHATWG.DOM.Batch {
     }
 
     private mutating func write(_ operation: WHATWG.DOM.Operation) {
-        bytes.append(operation.rawValue)
+        bytes.append(Byte(operation))
     }
 
     private mutating func write(_ value: Int32) {
         let bits = UInt32(bitPattern: value)
-        bytes.append(UInt8(truncatingIfNeeded: bits))
-        bytes.append(UInt8(truncatingIfNeeded: bits >> 8))
-        bytes.append(UInt8(truncatingIfNeeded: bits >> 16))
-        bytes.append(UInt8(truncatingIfNeeded: bits >> 24))
+        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits)))
+        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 8)))
+        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 16)))
+        bytes.append(Byte(bitPattern: UInt8(truncatingIfNeeded: bits >> 24)))
     }
 
     private mutating func write(_ node: WHATWG.DOM.Node) {
@@ -48,14 +48,10 @@ extension WHATWG.DOM.Batch {
     }
 
     private mutating func write(_ string: String) {
-        let start = bytes.count
-        write(Int32(0))
-        bytes.append(contentsOf: string.utf8)
-        let count = UInt32(bytes.count - start - 4)
-        bytes[start] = UInt8(truncatingIfNeeded: count)
-        bytes[start + 1] = UInt8(truncatingIfNeeded: count >> 8)
-        bytes[start + 2] = UInt8(truncatingIfNeeded: count >> 16)
-        bytes[start + 3] = UInt8(truncatingIfNeeded: count >> 24)
+        write(Int32(string.utf8.count))
+        for unit in string.utf8 {
+            bytes.append(Byte(bitPattern: unit))
+        }
     }
 }
 
@@ -123,10 +119,10 @@ extension WHATWG.DOM.Batch {
         write(value)
     }
 
-    public mutating func checked(_ checked: Bool, on node: WHATWG.DOM.Node) {
+    public mutating func checked(_ checkedness: WHATWG.DOM.Checkedness, on node: WHATWG.DOM.Node) {
         write(.checked)
         write(node)
-        bytes.append(checked ? 1 : 0)
+        bytes.append(Byte(bitPattern: checkedness == .checked ? 1 : 0))
     }
 
     public mutating func data(_ data: String, on node: WHATWG.DOM.Node) {

@@ -4,11 +4,11 @@ extension WHATWG.DOM {
 
         public var value: String
 
-        public var checked: Bool
+        public var checkedness: WHATWG.DOM.Checkedness
 
-        public init(value: String = "", checked: Bool = false) {
+        public init(value: String = "", checkedness: WHATWG.DOM.Checkedness = .unchecked) {
             self.value = value
-            self.checked = checked
+            self.checkedness = checkedness
         }
     }
 }

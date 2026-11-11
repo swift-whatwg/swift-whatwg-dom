@@ -1,9 +1,13 @@
 extension WHATWG.DOM {
 
-    public enum Loop {
+    public enum Loop {}
+}
 
-        nonisolated(unsafe) public static var dispatch: (Int32) -> Void = { _ in }
+extension WHATWG.DOM.Loop {
 
-        nonisolated(unsafe) public static var tick: () -> Void = {}
-    }
+    // WHY: a WebAssembly module in a page runs on the page's one thread; the exported functions and the module's own code are its only callers.
+    nonisolated(unsafe) public static var dispatch: (Int32) -> Void = { _ in }
+
+    // WHY: a WebAssembly module in a page runs on the page's one thread; the exported functions and the module's own code are its only callers.
+    nonisolated(unsafe) public static var tick: () -> Void = {}
 }
