@@ -1,5 +1,5 @@
-public import WHATWG_DOM
 import Binary
+public import WHATWG_DOM
 
 extension WHATWG.DOM.Memory {
 
