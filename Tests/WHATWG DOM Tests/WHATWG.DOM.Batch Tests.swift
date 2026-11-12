@@ -87,4 +87,10 @@ struct `WHATWG.DOM.Batch Tests` {
             #expect(WHATWG.DOM.Script.source.contains("case \(UInt8(bitPattern: Byte(operation))):"))
         }
     }
+
+    @Test
+    func `the script gives a command module an empty argument list`() {
+        #expect(WHATWG.DOM.Script.source.contains("args_sizes_get(count, size)"))
+        #expect(WHATWG.DOM.Script.source.contains("args_get()"))
+    }
 }

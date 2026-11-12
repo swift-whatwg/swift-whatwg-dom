@@ -94,6 +94,8 @@ extension WHATWG.DOM.Script {
                   view.setUint32(written, total, true);
                   return 0;
                 },
+                args_sizes_get(count, size) { const view = new DataView(memory.buffer); view.setUint32(count, 0, true); view.setUint32(size, 0, true); return 0; },
+                args_get() { return 0; },
                 random_get(pointer, length) { crypto.getRandomValues(new Uint8Array(memory.buffer, pointer, length)); return 0; },
                 clock_time_get(id, precision, result) { new DataView(memory.buffer).setBigUint64(result, BigInt(Math.round(performance.now() * 1e6)), true); return 0; },
                 proc_exit(code) { throw new Error("exit " + code); },
