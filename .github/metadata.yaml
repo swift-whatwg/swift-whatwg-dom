@@ -1,10 +1,9 @@
 # .github/metadata.yaml
-description: "Swift implementation of the WHATWG DOM Living Standard for a WebAssembly module in a browser: DOM changes go out as one command buffer, events come back in."
+description: "Swift implementation of the WHATWG DOM Living Standard: event types by name, and an element's checkedness."
 topics:
   - standards
   - whatwg
   - dom
-  - webassembly
   - web-standards
 homepage: "https://swift-institute.org"
 readme:

@@ -12,39 +12,22 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        .library(name: "WHATWG DOM", targets: ["WHATWG DOM"]),
-        .library(name: "WHATWG DOM Test Support", targets: ["WHATWG DOM Test Support"]),
+        .library(name: "WHATWG DOM", targets: ["WHATWG DOM"])
     ],
     dependencies: [
-        .package(url: "https://github.com/swift-whatwg/swift-whatwg.git", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-byte.git", branch: "main"),
-        .package(url: "https://github.com/swift-atoms/swift-binary.git", branch: "main"),
+        .package(url: "https://github.com/swift-whatwg/swift-whatwg.git", branch: "main")
     ],
     targets: [
         .target(
             name: "WHATWG DOM",
             dependencies: [
-                .product(name: "WHATWG", package: "swift-whatwg"),
-                .product(name: "Byte", package: "swift-byte"),
-                .product(name: "Binary", package: "swift-binary"),
-            ],
-            swiftSettings: [
-                .enableExperimentalFeature("Extern")
+                .product(name: "WHATWG", package: "swift-whatwg")
             ]
-        ),
-        .target(
-            name: "WHATWG DOM Test Support",
-            dependencies: [
-                .target(name: "WHATWG DOM"),
-                .product(name: "Binary", package: "swift-binary"),
-            ],
-            path: "Tests/Support"
         ),
         .testTarget(
             name: "WHATWG DOM Tests",
             dependencies: [
-                .target(name: "WHATWG DOM"),
-                .target(name: "WHATWG DOM Test Support"),
+                .target(name: "WHATWG DOM")
             ]
         ),
     ],
